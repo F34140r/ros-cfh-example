@@ -134,7 +134,7 @@ void CameraControl(refbox_msgs_example::CameraControl msg){
  * Beacon Signal
  *
  * This function send the beacon signal
- * The is called from the main loop
+ * The function is called from the main loop
  */
 void send_beacon(){
   timespec start;                            /*generate the timestamp over boost or chrono (C++11) */
@@ -163,9 +163,16 @@ int main(int argc, char **argv){
 
   ros::init(argc, argv, "refbox_node");
   ROS_INFO("Refbox is running!");
-
   ros::NodeHandle nh;
-  std::string hostname = "127.0.0.1";           /*Parameters must change !*/
+  ros::Rate loop_rate(1); // one Hz
+  int count = 0;
+
+  /*
+   * Confgiuration Parameters
+   * - can use the ros parameter
+   *   Server to handle this
+   */ 
+  std::string hostname = "127.0.0.1";
   int team_port = 4440, public_port = 4448;
 
   name      = "nobody";
@@ -179,6 +186,12 @@ int main(int argc, char **argv){
 
   boost::asio::io_service io_service;
 
+  /*
+   *  peer creation
+   *  Section of peer creation
+   *  creation the public and team peer
+   *
+   */
   peer_public = new ProtobufBroadcastPeer(hostname, public_port);       /*create public peer*/
 
   MessageRegister &message_register = peer_public->message_register();  /*create internal message handler*/
@@ -199,16 +212,22 @@ int main(int argc, char **argv){
   signals.async_wait(signal_handler);                                 /*Start an asynchronous wait for one of the signals to occur.*/
 #endif
 
+  /*
+   * Ros Part
+   * creation the Publisher und Subscriber
+   * for Ros
+   */
   //Publisher
   AttentionMessage_pub = nh.advertise<refbox_msgs_example::AttentionMessage> ("attention_message", 10);
 
   //Subscriber
   CameraConrol_sub = nh.subscribe<refbox_msgs_example::CameraControl>("camera_control", 1000, CameraControl);
 
-  ros::Rate loop_rate(1); // Em Hz
 
-  int count = 0;
-
+  /*
+   *  Main loop
+   *
+   */
   while (ros::ok()) {
     send_beacon();
 
