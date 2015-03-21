@@ -2,6 +2,8 @@ RoCKin@Work cfh Node Example
 ===============================
 
 This is the repository of the example node for the cfh of RoCKIn competition (http://rockinrobotchallenge.eu).
+Is tested under ROS Indigo. Is a beta version and under construction !
+
 
 ## Installation
 To use this node, please install this packages

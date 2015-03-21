@@ -33,8 +33,24 @@
 
 #include <AttentionMessage.pb.h>
 #include <BeaconSignal.pb.h>
-#include <Time.pb.h>
+#include <BenchmarkState.pb.h>
+#include <BenchmarkFeedback.pb.h>
 #include <Camera.pb.h>
+#include <ConveyorBelt.pb.h>
+#include <CompressedImage.pb.h>
+#include <DrillingMachine.pb.h>
+#include <ForceFittingMachine.pb.h>
+#include <Image.pb.h>
+#include <Inventory.pb.h>
+#include <LoggingStatus.pb.h>
+#include <Order.pb.h>
+#include <Pose3D.pb.h>
+#include <Position3D.pb.h>
+#include <Quaternion.pb.h>
+#include <RobotInfo.pb.h>
+#include <RobotStatusReport.pb.h>
+#include <Time.pb.h>
+#include <VersionInfo.pb.h>
 
 
 //publisher
@@ -196,6 +212,16 @@ int main(int argc, char **argv){
 
   MessageRegister &message_register = peer_public->message_register();  /*create internal message handler*/
   message_register.add_message_type<AttentionMessage>();                /*added messagetype to the handler*/
+  message_register.add_message_type<BeaconSignal>();
+  message_register.add_message_type<BenchmarkState>();
+  message_register.add_message_type<CompressedImage>();
+  message_register.add_message_type<ConveyorBeltStatus>();
+  message_register.add_message_type<DrillingMachineStatus>();
+  message_register.add_message_type<ForceFittingMachineStatus>();
+  message_register.add_message_type<Inventory>();
+  message_register.add_message_type<OrderInfo>();
+  message_register.add_message_type<RobotInfo>();
+  message_register.add_message_type<VersionInfo>();
 
   peer_team = new ProtobufBroadcastPeer(hostname, team_port, &message_register); /*create team peer and linked to internal message handler*/
 
