@@ -1,0 +1,9 @@
+<launch>
+	<arg name="hostname" default="192.168.0.107:12080"/>
+	<node name="refbox_node" pkg="refbox_node" type="refbox_node" output="screen">
+		<param name="hostname" value="$(arg hostname)" />
+		<param name="in_port" value="4444" />
+		<param name="out_port" value="4445" />
+		<param name="crypto_flag" value="false" />
+	</node>
+</launch>
