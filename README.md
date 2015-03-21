@@ -14,7 +14,7 @@ sudo apt-get install protobuf libprotoc-dev libprotobuf-dev protobuf-c-compiler 
 ### Cloning the Git repository:
 
     cd ~/catkin_ws/src/
-    git clone https://github.com/F34140r/ros-cfh-example.git
+    git clone https://github.com/F34140r/ros-cfh-example.git ./ros_cfh_example
 
 ### Compiling the node:
 
