@@ -25,9 +25,9 @@
 # SOFTWARE.
 
 cmake_minimum_required(VERSION 2.8.3)
-project(refbox_node_example)
+project(cfh_node_example)
 
-find_package(catkin REQUIRED COMPONENTS roscpp message_generation sensor_msgs refbox_msgs genmsg roslaunch)
+find_package(catkin REQUIRED COMPONENTS roscpp message_generation sensor_msgs cfh_msgs_example genmsg roslaunch)
 find_package(Boost REQUIRED COMPONENTS system filesystem thread)
 find_package(OpenSSL REQUIRED)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
@@ -35,18 +35,18 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x -DHAVE_LIBCRYPTO")
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-catkin_package(CATKIN_DEPENDS refbox_msgs)
+catkin_package(CATKIN_DEPENDS cfh_msgs_example)
 
-add_executable(refbox_node_example
+add_executable(cfh_node_example
    src/client.cpp
    src/crypto.cpp
    src/message_register.cpp
    src/peer.cpp
    src/server.cpp
-   src/refbox_node_example.cpp
+   src/cfh_node_example.cpp
 )
 
-target_link_libraries(refbox_node_example
+target_link_libraries(cfh_node_example
    ${catkin_LIBRARIES}
    ${OPENSSL_LIBRARIES}
    ${Boost_LIBRARIES}

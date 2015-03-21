@@ -25,7 +25,7 @@
 # SOFTWARE.
 
 cmake_minimum_required(VERSION 2.8.3)
-project(refbox_msgs_example)
+project(cfh_msgs_example)
 
 find_package(catkin REQUIRED message_generation genmsg std_msgs)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)

@@ -1,7 +1,7 @@
-RoCKin@Work Refbox Node Example
+RoCKin@Work cfh Node Example
 ===============================
 
-This is the repository of the example node for the refbox of RoCKIn competition (http://rockinrobotchallenge.eu).
+This is the repository of the example node for the cfh of RoCKIn competition (http://rockinrobotchallenge.eu).
 
 ## Installation
 To use this node, please install this packages
@@ -12,7 +12,7 @@ sudo apt-get install protobuf libprotoc-dev libprotobuf-dev protobuf-c-compiler 
 ### Cloning the Git repository:
 
     cd ~/catkin_ws/src/
-    git clone https://github.com/F34140r/ros-refbox-example.git
+    git clone https://github.com/F34140r/ros-cfh-example.git
 
 ### Compiling the node:
 
@@ -22,4 +22,4 @@ sudo apt-get install protobuf libprotoc-dev libprotobuf-dev protobuf-c-compiler 
 
 Proto Message doesn't build correctly  
 
-  Remove the refbox-msgs-example under devel/include of your catkin workspace       and try again
+  Remove the cfh-msgs-example under devel of your catkin workspace  and try again

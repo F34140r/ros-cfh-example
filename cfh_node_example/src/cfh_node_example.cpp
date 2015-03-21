@@ -38,10 +38,10 @@
 
 
 //publisher
-#include <refbox_msgs_example/AttentionMessage.h>
+#include <cfh_msgs_example/AttentionMessage.h>
 
 //subscribe
-#include <refbox_msgs_example/CameraControl.h>
+#include <cfh_msgs_example/CameraControl.h>
 
 #include <boost/asio.hpp>
 #include <boost/date_time.hpp>
@@ -58,10 +58,10 @@ std::string name, team_name;
 unsigned long seq_ = 0;
 ProtobufBroadcastPeer *peer_public = NULL, *peer_team = NULL;
 
-//Publisher
+//Ros Publisher
 ros::Publisher AttentionMessage_pub;
 
-//Subscriber
+//Ros Subscriber
 ros::Subscriber CameraConrol_sub;
 
 void signal_handler(const boost::system::error_code &error, int signum){
@@ -85,10 +85,10 @@ void handle_send_error(std::string msg){
 }
 
 /*
- * Handler for recive errors.
+ * Handler for receive errors.
  *
- * This handler is called for recive errors.
- * Print the message that should be recive as Ros Warning
+ * This handler is called for receive errors.
+ * Print the message that should be received as a Ros Warning
  *
  */
 void handle_recv_error(boost::asio::ip::udp::endpoint &endpoint,
@@ -98,9 +98,9 @@ void handle_recv_error(boost::asio::ip::udp::endpoint &endpoint,
 }
 
 /*
- * Handler for recive messages .
+ * Handler for receive messages .
  *
- * This handler is called for recive message.
+ * This handler is called for receiving messages.
  * Main function in this node.
  *
  */
@@ -110,7 +110,7 @@ void handle_message(boost::asio::ip::udp::endpoint &sender,
 
   std::shared_ptr<AttentionMessage> am;                         /* shared_ptr on the message type */
   if((am = std::dynamic_pointer_cast<AttentionMessage>(msg))){  /* test it is the right message type */
-    refbox_msgs_example::AttentionMessage attention_msg;        /* ros message handling */
+    cfh_msgs_example::AttentionMessage attention_msg;        /* ros message handling */
     attention_msg.message      = am->message();
     attention_msg.time_to_show = am->time_to_show();
     attention_msg.team         = am->team();
@@ -121,11 +121,11 @@ void handle_message(boost::asio::ip::udp::endpoint &sender,
 /*
  * Example for a send command
  *
- * This subscribe control the qa camera.
+ * This is the subscriber to control the QA camera.
  * Use subscriber or Action server/client to send commands to the refbox
  *
  */
-void CameraControl(refbox_msgs_example::CameraControl msg){
+void CameraControl(cfh_msgs_example::CameraControl msg){
   std::shared_ptr<CameraCommand> cam_control(new CameraCommand); /*create a new message */
   peer_team->send(cam_control);                                  /*send the Message over team peer */
 }
@@ -133,7 +133,7 @@ void CameraControl(refbox_msgs_example::CameraControl msg){
 /*
  * Beacon Signal
  *
- * This function send the beacon signal
+ * This function sends the beacon signal
  * The function is called from the main loop
  */
 void send_beacon(){
@@ -150,7 +150,7 @@ void send_beacon(){
 
   signal->set_peer_name(name);           /*write the name und co into the message*/
   signal->set_team_name(team_name);
-  signal->set_seq(++seq_);               /*increase the sequenz number*/
+  signal->set_seq(++seq_);               /*increase the sequence number*/
   peer_team->send(signal);               /*send over team peer*/
 }
 /*
@@ -161,8 +161,8 @@ void send_beacon(){
  */
 int main(int argc, char **argv){
 
-  ros::init(argc, argv, "refbox_node");
-  ROS_INFO("Refbox is running!");
+  ros::init(argc, argv, "cfh_node");
+  ROS_INFO("CFH is running!");
   ros::NodeHandle nh;
   ros::Rate loop_rate(1); // one Hz
   int count = 0;
@@ -171,7 +171,7 @@ int main(int argc, char **argv){
    * Confgiuration Parameters
    * - can use the ros parameter
    *   Server to handle this
-   */ 
+   */
   std::string hostname = "127.0.0.1";
   int team_port = 4440, public_port = 4448;
 
@@ -218,10 +218,10 @@ int main(int argc, char **argv){
    * for Ros
    */
   //Publisher
-  AttentionMessage_pub = nh.advertise<refbox_msgs_example::AttentionMessage> ("attention_message", 10);
+  AttentionMessage_pub = nh.advertise<cfh_msgs_example::AttentionMessage> ("attention_message", 10);
 
   //Subscriber
-  CameraConrol_sub = nh.subscribe<refbox_msgs_example::CameraControl>("camera_control", 1000, CameraControl);
+  CameraConrol_sub = nh.subscribe<cfh_msgs_example::CameraControl>("camera_control", 1000, CameraControl);
 
 
   /*
