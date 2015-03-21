@@ -25,6 +25,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
+
 #define BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
 
 #include "ros/ros.h"
@@ -72,23 +73,44 @@ void signal_handler(const boost::system::error_code &error, int signum){
   }
 }
 
+/*
+ * Handler for send errors.
+ *
+ * This handler is called for send errors.
+ * Print the message that should be send as Ros Warning
+ *
+ */
 void handle_send_error(std::string msg){
   ROS_WARN("Send error: %s\n", msg.c_str());
 }
 
+/*
+ * Handler for recive errors.
+ *
+ * This handler is called for recive errors.
+ * Print the message that should be recive as Ros Warning
+ *
+ */
 void handle_recv_error(boost::asio::ip::udp::endpoint &endpoint,
                         std::string msg){
   ROS_WARN("Recv error: %s\n", msg.c_str());
 
 }
 
+/*
+ * Handler for recive messages .
+ *
+ * This handler is called for recive message.
+ * Main function in this node.
+ *
+ */
 void handle_message(boost::asio::ip::udp::endpoint &sender,
                     uint16_t component_id, uint16_t msg_type,
                     std::shared_ptr<google::protobuf::Message> msg){
 
-  std::shared_ptr<AttentionMessage> am;
-  if((am = std::dynamic_pointer_cast<AttentionMessage>(msg))){
-    refbox_msgs_example::AttentionMessage attention_msg;
+  std::shared_ptr<AttentionMessage> am;                         /* shared_ptr on the message type */
+  if((am = std::dynamic_pointer_cast<AttentionMessage>(msg))){  /* test it is the right message type */
+    refbox_msgs_example::AttentionMessage attention_msg;        /* ros message handling */
     attention_msg.message      = am->message();
     attention_msg.time_to_show = am->time_to_show();
     attention_msg.team         = am->team();
@@ -96,36 +118,54 @@ void handle_message(boost::asio::ip::udp::endpoint &sender,
   }
 }
 
+/*
+ * Example for a send command
+ *
+ * This subscribe control the qa camera.
+ * Use subscriber or Action server/client to send commands to the refbox
+ *
+ */
 void CameraControl(refbox_msgs_example::CameraControl msg){
-  std::shared_ptr<CameraCommand> cam_control(new CameraCommand);
-  peer_team->send(cam_control);
+  std::shared_ptr<CameraCommand> cam_control(new CameraCommand); /*create a new message */
+  peer_team->send(cam_control);                                  /*send the Message over team peer */
 }
 
+/*
+ * Beacon Signal
+ *
+ * This function send the beacon signal
+ * The is called from the main loop
+ */
 void send_beacon(){
-  timespec start;
+  timespec start;                            /*generate the timestamp over boost or chrono (C++11) */
   clock_gettime(CLOCK_REALTIME, &start);
   int32_t sec = start.tv_sec;
   int32_t nsec = start.tv_nsec;
 
-  std::shared_ptr<BeaconSignal> signal(new BeaconSignal());
+  std::shared_ptr<BeaconSignal> signal(new BeaconSignal());  /*create the message */
 
-  Time *time = signal->mutable_time();
-  time->set_sec(sec);
+  Time *time = signal->mutable_time();  /*seperate the time segment of the message */
+  time->set_sec(sec);                   /*write the timestamp into the message*/
   time->set_nsec(nsec);
 
-  signal->set_peer_name(name);
+  signal->set_peer_name(name);           /*write the name und co into the message*/
   signal->set_team_name(team_name);
-  signal->set_seq(++seq_);
-  peer_team->send(signal);
+  signal->set_seq(++seq_);               /*increase the sequenz number*/
+  peer_team->send(signal);               /*send over team peer*/
 }
-
+/*
+ * Main function
+ *
+ * Use to create and configure the peers
+ *
+ */
 int main(int argc, char **argv){
 
   ros::init(argc, argv, "refbox_node");
   ROS_INFO("Refbox is running!");
 
   ros::NodeHandle nh;
-  std::string hostname = "192.168.1.100";
+  std::string hostname = "127.0.0.1";           /*Parameters must change !*/
   int team_port = 4440, public_port = 4448;
 
   name      = "nobody";
@@ -139,14 +179,14 @@ int main(int argc, char **argv){
 
   boost::asio::io_service io_service;
 
-  peer_public = new ProtobufBroadcastPeer(hostname, public_port);
+  peer_public = new ProtobufBroadcastPeer(hostname, public_port);       /*create public peer*/
 
-  MessageRegister &message_register = peer_public->message_register();
-  message_register.add_message_type<AttentionMessage>();
+  MessageRegister &message_register = peer_public->message_register();  /*create internal message handler*/
+  message_register.add_message_type<AttentionMessage>();                /*added messagetype to the handler*/
 
-  peer_team = new ProtobufBroadcastPeer(hostname, team_port, &message_register);
+  peer_team = new ProtobufBroadcastPeer(hostname, team_port, &message_register); /*create team peer and linked to internal message handler*/
 
-  peer_public->signal_received().connect(handle_message);
+  peer_public->signal_received().connect(handle_message);              /*bind the peers to the callback funktions*/
   peer_public->signal_send_error().connect(handle_send_error);
   peer_public->signal_recv_error().connect(handle_recv_error);
 
@@ -155,11 +195,8 @@ int main(int argc, char **argv){
   peer_team->signal_recv_error().connect(handle_recv_error);
 
 #if BOOST_ASIO_VERSION >= 100601
-  // Construct a signal set registered for process termination.
-  boost::asio::signal_set signals(io_service, SIGINT, SIGTERM);
-
-  // Start an asynchronous wait for one of the signals to occur.
-  signals.async_wait(signal_handler);
+  boost::asio::signal_set signals(io_service, SIGINT, SIGTERM);       /*Construct a signal set registered for process termination. */
+  signals.async_wait(signal_handler);                                 /*Start an asynchronous wait for one of the signals to occur.*/
 #endif
 
   //Publisher
