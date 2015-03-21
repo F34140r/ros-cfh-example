@@ -1,2 +1,25 @@
-# ros-refbox-example
-Example Client for Hub/Refbox 
+RoCKin@Work Refbox Node Example
+===============================
+
+This is the repository of the example for the a ros integration for the RoCKIn competition (http://rockinrobotchallenge.eu).
+
+## Installation
+To use this node, please install this packages
+
+sudo apt-get install protobuf libprotoc-dev libprotobuf-dev protobuf-c-compiler protobuf-compiler libssl-dev libelf-dev libzmq3-dev
+
+## Compiling the example node
+### Cloning the Git repository:
+
+    cd ~/catkin_ws/src/
+    git clone https://github.com/F34140r/ros-refbox-example.git
+
+### Compiling the node:
+
+    cd .. & catkin_make
+
+## Known Errors
+
+Proto Message doesn't build correctly  
+
+  Remove the refbox-msgs-example under devel/include in your catkin workspace a     and try again
