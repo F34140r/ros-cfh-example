@@ -172,8 +172,8 @@ int main(int argc, char **argv){
    * - can use the ros parameter
    *   Server to handle this
    */
-  std::string hostname = "127.0.0.1";
-  int team_port = 4440, public_port = 4448;
+  std::string hostname = "192.168.1.100";
+  int team_port = 4448, public_port = 4444;
 
   name      = "nobody";
   team_name = "nobody";
