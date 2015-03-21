@@ -1,7 +1,7 @@
 RoCKin@Work Refbox Node Example
 ===============================
 
-This is the repository of the example for the a ros integration for the RoCKIn competition (http://rockinrobotchallenge.eu).
+This is the repository of the example node for the refbox of RoCKIn competition (http://rockinrobotchallenge.eu).
 
 ## Installation
 To use this node, please install this packages
@@ -22,4 +22,4 @@ sudo apt-get install protobuf libprotoc-dev libprotobuf-dev protobuf-c-compiler 
 
 Proto Message doesn't build correctly  
 
-  Remove the refbox-msgs-example under devel/include in your catkin workspace a     and try again
+  Remove the refbox-msgs-example under devel/include of your catkin workspace       and try again
