@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <name>ros_cfh_example</name>
+  <version>0.0.1</version>
+  <description>ROS metapackages for industrial robots.</description>
+  <license>GPLv3</license>
+
+  <author email="tbd@foo.com">RoCKIn</author>
+  <maintainer email="tbd@foo.com">RoCKIn</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>
